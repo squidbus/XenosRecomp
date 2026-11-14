@@ -52,4 +52,9 @@ endif()
 if (XENOS_RECOMP_AIR)
     target_compile_definitions(XenosRecomp PRIVATE XENOS_RECOMP_AIR)
     target_sources(XenosRecomp PRIVATE air_compiler.cpp air_compiler.h)
+
+    # The Metal compiler otherwise targets the SDK's own macOS version, and the shaders then fail to load on any older macOS.
+    if (CMAKE_OSX_DEPLOYMENT_TARGET)
+        target_compile_definitions(XenosRecomp PRIVATE XENOS_RECOMP_AIR_MACOS_VERSION_MIN="-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+    endif()
 endif()
